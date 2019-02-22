@@ -2,10 +2,8 @@
 """
 bit I/O
 
-Student ID: 107522049
 Author: Cheng-Hsin Wang
 Country: ROC
-School: NCU 
 """
 class BitStream(object):
     def __init__(self):

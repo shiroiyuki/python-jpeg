@@ -1,9 +1,7 @@
 # coding=utf8
 """ 
-Student ID: 107522049
 Author: Cheng-Hsin Wang
-Country: ROC
-School: NCU 
+Country: ROC 
 """
 # jpeg codec
 # encoding process:

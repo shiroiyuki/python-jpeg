@@ -2,10 +2,8 @@
 """ 
 simple jpeg codec
 
-Student ID: 107522049
 Author: Cheng-Hsin Wang
 Country: ROC
-School: NCU 
 """
 from . import codeBook
 from .quantizationTable import Luminance, Chrominance

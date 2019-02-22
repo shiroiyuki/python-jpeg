@@ -2,10 +2,8 @@
 """
 define HuffmanTree structure
  
-Student ID: 107522049
 Author: Cheng-Hsin Wang
 Country: ROC
-School: NCU 
 """
 class Node(object):
     pass

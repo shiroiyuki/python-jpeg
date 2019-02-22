@@ -2,10 +2,8 @@
 """ 
 default Huffman Code for AC and DC
 
-Student ID: 107522049
 Author: Cheng-Hsin Wang
 Country: ROC
-School: NCU 
 """
 # DC codeword = Category codeword + DIFF value codeword
 #

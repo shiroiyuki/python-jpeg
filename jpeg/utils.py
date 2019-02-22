@@ -1,11 +1,9 @@
 # coding=utf8
 """ 
-some fuction
+some widgets
 
-Student ID: 107522049
 Author: Cheng-Hsin Wang
-Country: ROC
-School: NCU 
+Country: ROC 
 """
 import numpy as np
 import math
