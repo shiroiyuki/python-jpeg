@@ -2,10 +2,8 @@
 """
 default quantization table for Luminance and Chrominance
 
-Student ID: 107522049
 Author: Cheng-Hsin Wang
-Country: ROC
-School: NCU 
+Country: ROC 
 """
 import numpy as np
 
