@@ -1,7 +1,14 @@
+# coding=utf8
+""" 
+some fuction
+
+Student ID: 107522049
+Author: Cheng-Hsin Wang
+Country: ROC
+School: NCU 
+"""
 import numpy as np
-
-
-
+import math
 def zigzag_points(rows, cols):
     # constants for directions
     UP, DOWN, RIGHT, LEFT, UP_RIGHT, DOWN_LEFT = range(6)
@@ -47,37 +54,64 @@ def zigzag_points(rows, cols):
                     point = move(DOWN, point)
                 else:
                     point = move(RIGHT, point)
+    
+def dpcm(src, pred):
+    diff = (src - pred) //2
+    pred = pred + diff * 2   # rebuild
+    return diff, pred
 
+def idpcm(diff, pred):
+    rev = (diff * 2 + pred) 
+    return rev, rev
 
-def bits_required(n):
+'''
+def ycbcr2rgb(block):
+    rgb = np.empty((8, 8, 3), dtype=np.uint8)
+    for i in range(8):
+        for j in range(8):
+            rgb[i][j][0] = block[i][j][0] + 1.402*(block[i][j][2]-128)
+            rgb[i][j][1] = block[i][j][0] - 0.34414*(block[i][j][1]-128)- 0.71414*(block[i][j][2]-128)
+            rgb[i][j][2] = block[i][j][0] + 1.772*(block[i][j][1]-128)
+    return (rgb)
+
+def rgb2ycbcr(block):
+    ycbcr = np.empty((8, 8, 3), dtype=np.float)
+    for i in range(8):
+        for j in range(8):
+            ycbcr[i][j][0] = 0.299*(block[i][j][0] - block[i][j][1]) + block[i][j][1] + 0.114*(block[i][j][2] - block[i][j][1])
+            ycbcr[i][j][1] = 0.5643*(block[i][j][2] - ycbcr[i][j][0])
+            ycbcr[i][j][2] = 0.7133*(block[i][j][0] - ycbcr[i][j][0])
+                
+    return (ycbcr)
+'''
+
+def rgb2ycbcr(im):
+    xform = np.array([[.299, .587, .114], [-.1687, -.3313, .5], [.5, -.4187, -.0813]])
+    ycbcr = im.dot(xform.T)
+    ycbcr[:,:,[1,2]] += 128
+    return np.uint8(ycbcr)
+
+def ycbcr2rgb(im):
+    xform = np.array([[1, 0, 1.402], [1, -0.34414, -.71414], [1, 1.772, 0]])
+    rgb = im.astype(np.float)
+    rgb[:,:,[1,2]] -= 128
+    rgb = rgb.dot(xform.T)
+    np.putmask(rgb, rgb > 255, 255)
+    np.putmask(rgb, rgb < 0, 0)
+    return np.uint8(rgb)
+    
+def binstrFlip(binstr):
+    return ''.join(map(lambda c: '0' if c == '1' else '1', binstr))
+
+def int2binstr(n):
+    return bin(abs(n))[2:] if n > 0 else binstrFlip(bin(abs(n))[2:])
+
+# category for ac or dc 
+def categorize(n):
     n = abs(n)
     result = 0
     while n > 0:
         n >>= 1
         result += 1
     return result
-
-
-def binstr_flip(binstr):
-    # check if binstr is a binary string
-    if not set(binstr).issubset('01'):
-        raise ValueError("binstr should have only '0's and '1's")
-    return ''.join(map(lambda c: '0' if c == '1' else '1', binstr))
-
-
-def uint_to_binstr(number, size):
-    return bin(number)[2:][-size:].zfill(size)
-
-
-def int_to_binstr(n):
-    if n == 0:
-        return ''
-
-    binstr = bin(abs(n))[2:]
-
-    # change every 0 to 1 and vice verse when n is negative
-    return binstr if n > 0 else binstr_flip(binstr)
-
-
-def flatten(lst):
-    return [item for sublist in lst for item in sublist]
+    

@@ -1,72 +1,77 @@
-from queue import PriorityQueue
-
-class Node(Object):
+# coding=utf8
+"""
+define HuffmanTree structure
+ 
+Student ID: 107522049
+Author: Cheng-Hsin Wang
+Country: ROC
+School: NCU 
+"""
+class Node(object):
     pass
 
 # An internal node in a code tree. It has two nodes as children.
 class InternalNode(Node):
-	def __init__(self, left, right):
-		if not isinstance(left, Node) or not isinstance(right, Node):
-			raise TypeError()
-		self.leftchild = left
-		self.rightchild = right
+    def __init__(self, left, right):
+        self.left = left
+        self.right = right
 
 
 # A leaf node in a code tree. It has a symbol value.
 class Leaf(Node):
-	def __init__(self, sym):
-		if sym < 0:
-			raise ValueError("Symbol value must be non-negative")
-		self.symbol = sym
+    def __init__(self, run, size):
+        # set default value is error or nonsense
+        self.run = run 
+        self.size = size
 
-
-class HuffmanTree:
-	
-	# Constructs a code tree from the given tree of nodes and given symbol limit.
-	# Each symbol in the tree must have value strictly less than the symbol limit.
-	def __init__(self, root, symbollimit):
-		# Recursive helper function
-		def build_code_list(node, prefix):
-			if isinstance(node, InternalNode):
-				build_code_list(node.leftchild , prefix + (0,))
-				build_code_list(node.rightchild, prefix + (1,))
-			elif isinstance(node, Leaf):
-				if node.symbol >= symbollimit:
-					raise ValueError("Symbol exceeds symbol limit")
-				if self.codes[node.symbol] is not None:
-					raise ValueError("Symbol has more than one code")
-				self.codes[node.symbol] = prefix
-			else:
-				raise AssertionError("Illegal node type")
-		
-		if symbollimit < 2:
-			raise ValueError("At least 2 symbols needed")
-		# The root node of this code tree
-		self.root = root
-		# Stores the code for each symbol, or None if the symbol has no code.
-		# For example, if symbol 5 has code 10011, then codes[5] is the tuple (1,0,0,1,1).
-		self.codes = [None] * symbollimit
-		build_code_list(root, ())  # Fill 'codes' with appropriate data
-		
-	# Returns the Huffman code for the given symbol, which is a sequence of 0s and 1s.
-	def get_code(self, symbol):
-		if symbol < 0:
-			raise ValueError("Illegal symbol")
-		elif self.codes[symbol] is None:
-			raise ValueError("No code for given symbol")
-		else:
-			return self.codes[symbol]
-	
-	# Returns a string representation of this code tree,
-	# useful for debugging only, and the format is subject to change.
-	def __str__(self):
-		# Recursive helper function
-		def to_str(prefix, node):
-			if isinstance(node, InternalNode):
-				return to_str(prefix + "0", node.leftchild) + to_str(prefix + "0", node.rightchild)
-			elif isinstance(node, Leaf):
-				return "Code {}: Symbol {}\n".format(prefix, node.symbol)
-			else:
-				raise AssertionError("Illegal node type")
-		
-		return to_str("", self.root)
+class HuffmanTree(object):
+    def __init__(self):
+        self.Tree = InternalNode(None, None)
+    
+    def buildTree(self, code):
+        def _buildTree(symbol, run=-1, size=-1):
+            self.tmp = self.Tree
+            for i in symbol[:-1]:
+                if i is "1":
+                    if self.tmp.right is None:
+                        self.tmp.right = InternalNode(None,None)
+                    self.tmp = self.tmp.right
+                else:
+                    if self.tmp.left is None:
+                        self.tmp.left = InternalNode(None,None)
+                    self.tmp = self.tmp.left
+            if symbol[-1] is "1":
+                if not self.tmp.right is None:
+                    print(symbol,run,size)
+                    raise Exception("Wrong right")
+                self.tmp.right = Leaf(run, size)
+            else:
+                if not self.tmp.left is None:
+                    print(symbol,run,size)
+                    raise Exception("Wrong left")
+                self.tmp.left = Leaf(run, size)
+                
+        
+        listFlag = isinstance(code[0],list)
+        
+        if listFlag: # AC Hcode
+            for i in code:
+                index_x = code.index(i)
+                for j in i:
+                    if j is None:
+                        continue
+                    #print(index_x, i.index(j), j)
+                    _buildTree(j, index_x, i.index(j))
+        else: # DC HCode
+            for i in code: 
+                _buildTree(i, size = code.index(i))
+    
+    def readSymbol(self, symbol):
+        self.tmp = self.Tree
+        for i in symbol[:-1]:
+            if i is "1":
+                self.tmp = self.tmp.right
+            else:
+                self.tmp = self.tmp.left
+        self.tmp = self.tmp.right if symbol[-1] is "1" else self.tmp.left
+        return self.tmp.run,self.tmp.size

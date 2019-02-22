@@ -1,2 +1,2 @@
 # python-jpeg
-simple jpeg codec
+$ ./test.sh 3 LenaRGB.raw
